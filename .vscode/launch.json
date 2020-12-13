@@ -20,6 +20,7 @@
                     "kind": "bin"
                 }
             },
+            //"args": ["322820", "320994"],
             "args": ["322820"],
             "cwd": "${workspaceFolder}"
         },

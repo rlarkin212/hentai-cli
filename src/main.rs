@@ -1,9 +1,12 @@
 use std::{
+    convert::TryInto,
     env,
     error::Error,
     fs::{create_dir, File},
     io::{copy, Cursor},
 };
+
+use indicatif::ProgressBar;
 
 mod api;
 mod cli;
@@ -25,6 +28,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
         create_dir(&new_path_buf)?;
 
+        let image_count: u64 = images.len().try_into()?;
+        println!("Saving {} images - {}", image_count, api_model.title.pretty);
+        let bar = ProgressBar::new(image_count);
+
         for image in images {
             let destination_file_path = format!("{}/{}", &api_model.title.pretty, image.file_name);
 
@@ -32,7 +39,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
             let mut file_content = Cursor::new(image.file_contents);
 
             copy(&mut file_content, &mut destination)?;
+            bar.inc(1)
         }
+
+        bar.finish();
     }
 
     Ok(())

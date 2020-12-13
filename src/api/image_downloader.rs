@@ -1,3 +1,6 @@
+use std::convert::TryInto;
+
+use indicatif::ProgressBar;
 use reqwest::Response;
 
 use super::{model::ApiModel, model::ImageModel};
@@ -18,6 +21,10 @@ pub async fn get_galleries_info(api_urls: &Vec<String>) -> Result<Vec<ApiModel>,
 pub async fn get_images(api_model: &ApiModel) -> Result<Vec<ImageModel>, Box<dyn std::error::Error>> {
     let mut images: Vec<ImageModel> = Vec::new();
 
+    let image_count: u64 = api_model.num_pages.try_into()?;
+    println!("Fetching {} images - {}", image_count, &api_model.title.pretty);
+    let progress_bar = ProgressBar::new(image_count);
+
     for page in 1..api_model.num_pages + 1 {
         let target = format!("https://i.nhentai.net/galleries/{}/{}.jpg", api_model.media_id, page);
         let response = reqwest::get(&target).await?;
@@ -31,7 +38,10 @@ pub async fn get_images(api_model: &ApiModel) -> Result<Vec<ImageModel>, Box<dyn
         };
 
         images.push(image_model);
+        progress_bar.inc(1)
     }
+
+    progress_bar.finish();
 
     Ok(images)
 }
