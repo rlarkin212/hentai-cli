@@ -18,7 +18,7 @@ pub async fn get_galleries_info(api_urls: &Vec<String>) -> Result<Vec<ApiModel>,
 pub async fn get_images(api_model: &ApiModel) -> Result<Vec<ImageModel>, Box<dyn std::error::Error>> {
     let mut images: Vec<ImageModel> = Vec::new();
 
-    for page in 1..api_model.num_pages {
+    for page in 1..api_model.num_pages + 1 {
         let target = format!("https://i.nhentai.net/galleries/{}/{}.jpg", api_model.media_id, page);
         let response = reqwest::get(&target).await?;
         
