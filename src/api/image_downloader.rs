@@ -5,9 +5,7 @@ use reqwest::Response;
 
 use super::{model::ApiModel, model::ImageModel};
 
-pub async fn get_galleries_info(
-    api_urls: &Vec<String>,
-) -> Result<Vec<ApiModel>, Box<dyn std::error::Error>> {
+pub async fn get_galleries_info(api_urls: &Vec<String>) -> Result<Vec<ApiModel>, Box<dyn std::error::Error>> {
     let mut api_models: Vec<ApiModel> = Vec::new();
 
     for api_url in api_urls.iter() {
@@ -35,7 +33,7 @@ pub async fn get_images(api_model: &ApiModel,) -> Result<Vec<ImageModel>, Box<dy
         let target = match image_type {
             "j" => format!("https://i.nhentai.net/galleries/{}/{}.jpg", api_model.media_id, i + 1),
             "p" => format!("https://i.nhentai.net/galleries/{}/{}.png", api_model.media_id, i + 1),
-            _ => format!("file format not found / supported"),
+            _ => format!(""),
         };
 
         if target != "" {
