@@ -23,7 +23,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let api_models = api::get_galleries_info(&api_urls).await?;
 
     for api_model in api_models.iter() {
-        let new_path_buf = util::generate_path_buf(&api_model.title.pretty);
+        let dir_name = format!("{} - {}", &api_model.id, &api_model.title.pretty);
+        let new_path_buf = util::generate_path_buf(&dir_name);
         let images = api::get_images(&api_model).await?;
 
         create_dir(&new_path_buf)?;
@@ -33,7 +34,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         let bar = ProgressBar::new(image_count);
 
         for image in images {
-            let destination_file_path = format!("{}/{}", &api_model.title.pretty, image.file_name);
+            let destination_file_path = format!("{}/{}", dir_name, image.file_name);
 
             let mut destination = File::create(destination_file_path)?;
             let mut file_content = Cursor::new(image.file_contents);

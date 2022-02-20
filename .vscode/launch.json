@@ -1,4 +1,3 @@
-
 {
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
@@ -20,7 +19,9 @@
                     "kind": "bin"
                 }
             },
-            "args": ["322820", "320994", "212816"],
+            "args": [
+                "322820"
+            ],
             "cwd": "${workspaceFolder}"
         },
         {
